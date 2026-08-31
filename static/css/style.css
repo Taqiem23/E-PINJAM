@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+:root{--purple:#7045e8;--purple-dark:#5631c9;--ink:#18152f;--muted:#6f6a87;--bg:#f8f7fc;--white:#fff;--line:#e8e5f0;--success-bg:#e8f7ef;--success:#087a4b;--danger:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",Arial,sans-serif}a{color:inherit;text-decoration:none}.navbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}.nav-inner{max-width:1180px;margin:auto;min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 22px}.brand{font-family:"Plus Jakarta Sans",sans-serif;font-size:23px;font-weight:800;color:var(--purple)}nav{display:flex;align-items:center;gap:20px;flex-wrap:wrap}nav a{font-weight:500}nav a:hover{color:var(--purple)}.user-pill,.count{background:#f0ebfb;color:var(--purple-dark);padding:9px 14px;border-radius:22px;font-size:14px}.count{padding:2px 7px;font-size:12px}.page{max-width:1180px;margin:auto;padding:44px 22px 70px;min-height:calc(100vh - 140px)}.hero{min-height:420px;display:flex;align-items:center}.eyebrow{color:var(--purple);letter-spacing:2px;font-size:13px;font-weight:800;margin:0 0 14px}h1,h2,h3{font-family:"Plus Jakarta Sans",sans-serif}h1{font-size:clamp(38px,5vw,62px);line-height:1.05;margin:0 0 18px}h1 span{color:var(--purple)}h2{font-size:31px}.lead{color:var(--muted);font-size:18px;line-height:1.65;max-width:760px}.primary-btn,.outline-btn,.danger-btn,.disabled-btn{border:0;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:11px 20px;border-radius:13px;font:inherit;font-weight:700;cursor:pointer}.primary-btn{background:var(--purple);color:#fff}.primary-btn:hover{background:var(--purple-dark)}.outline-btn{border:1px solid #d7cef4;background:#fff;color:var(--purple-dark)}.danger-btn{background:#fff0ef;color:var(--danger)}.disabled-btn{background:#eeeef3;color:#9693a2;cursor:not-allowed}.small{min-height:38px;padding:8px 15px;font-size:14px}.section{padding:30px 0}.top-section{padding-top:20px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:25px}.section-head.compact{align-items:start}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.card,.list-card,.loan-card,.form-panel,.detail-card,.auth-card,.stat-card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 30px rgba(28,20,65,.035)}.card{padding:26px}.icon-box{width:56px;height:56px;display:grid;place-items:center;background:#f0eaff;color:var(--purple);border-radius:15px;font-size:24px;margin-bottom:18px}.code{color:#706a86;font-size:13px;font-weight:800;letter-spacing:1px}.card p,.list-row p,.loan-card p{color:var(--muted);line-height:1.55}.status{display:inline-flex;padding:7px 12px;border-radius:30px;font-size:13px;font-weight:800}.status.available,.status.returned{background:var(--success-bg);color:var(--success)}.status.borrowed{background:#fff0ef;color:var(--danger)}.divider{height:1px;background:var(--line);margin:20px 0}.card-actions,.detail-actions,.submit-row{display:flex;gap:10px;margin-top:20px}.auth-wrap{max-width:480px;margin:25px auto}.auth-wrap.wide{max-width:720px}.auth-card{padding:34px}.auth-card h1{font-size:40px}.form{display:grid;gap:17px}.form label{display:grid;gap:8px;font-weight:700}.form input,.form textarea,input,textarea{width:100%;border:1px solid #dcd8e7;background:#fff;border-radius:12px;padding:13px 14px;font:inherit;color:var(--ink);outline:none}input:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px #eee8ff}small{color:var(--muted);font-weight:400;line-height:1.4}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}.auth-links{display:flex;justify-content:center;gap:9px;margin-top:22px;font-size:14px}.auth-links a,.center a{color:var(--purple);font-weight:700}.center{text-align:center}.otp-input{text-align:center;font-size:25px;letter-spacing:8px}.flash-stack{display:grid;gap:10px;margin-bottom:22px}.flash{padding:14px 17px;border-radius:13px;border:1px solid var(--line);background:#fff}.flash.success{background:var(--success-bg);color:var(--success)}.flash.error{background:#fff0ef;color:var(--danger)}.detail-card{max-width:800px;margin:50px auto;padding:45px}.narrow{max-width:900px;margin:auto}.list-card{padding:0 24px}.list-card h2{padding-top:24px}.list-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line)}.list-row:last-child{border-bottom:0}.empty{text-align:center;padding:55px;background:#fff;border:1px dashed #d8d3e5;border-radius:20px}.loan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}.loan-card{padding:25px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:30px 0 45px}.stat-card{padding:25px}.stat-card span{color:var(--muted);font-weight:600}.stat-card strong{display:block;margin-top:8px;font:800 38px "Plus Jakarta Sans";color:var(--purple)}.table-wrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:18px}table{width:100%;border-collapse:collapse;min-width:850px}th,td{padding:15px 17px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}th{background:#fbfaff;font-size:13px;color:#615c75}td{font-size:14px}.admin-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:24px}.form-panel{padding:25px}.inline-form{margin-top:10px}.footer{text-align:center;padding:25px;color:#8b8799;font-size:13px;border-top:1px solid var(--line);background:#fff}@media(max-width:900px){.hero{min-height:auto;padding:30px 0}.grid-3,.loan-grid,.admin-grid,.stats{grid-template-columns:1fr 1fr}}@media(max-width:620px){.nav-inner{align-items:flex-start;padding-top:17px;padding-bottom:17px;flex-direction:column}nav{gap:12px}.grid-3,.loan-grid,.admin-grid,.stats,.form-grid{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}h1{font-size:40px}}
+
+/* Equipment images and inventory */
+.equipment-image{
+    width:100%;
+    height:190px;
+    object-fit:cover;
+    border-radius:15px;
+    display:block;
+    margin-bottom:18px;
+    background:#f0eaff;
+}
+.equipment-image-placeholder{
+    display:grid;
+    place-items:center;
+    color:var(--purple);
+    font-size:46px;
+}
+.stock-info{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:17px;
+    padding:12px 14px;
+    background:#faf9fe;
+    border:1px solid var(--line);
+    border-radius:12px;
+    color:var(--muted);
+    font-size:13px;
+}
+.stock-info strong{color:var(--purple-dark);font-size:16px}
+.equipment-list-row{align-items:center}
+.equipment-list-main{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    min-width:0;
+}
+.equipment-thumb{
+    width:92px;
+    height:72px;
+    flex:0 0 92px;
+    object-fit:cover;
+    border-radius:12px;
+    background:#f0eaff;
+}
+.placeholder-thumb{
+    display:grid;
+    place-items:center;
+    color:var(--purple);
+    font-size:28px;
+}
+.equipment-list-side{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:7px;
+}
+.stock-line{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:7px;
+}
+.stock-line strong{color:var(--purple-dark)}
+.stock-line span{margin-left:5px}
+.detail-image{
+    width:100%;
+    max-height:390px;
+    object-fit:cover;
+    border-radius:18px;
+    display:block;
+    margin-bottom:28px;
+}
+.detail-image-placeholder{
+    display:grid;
+    place-items:center;
+    height:300px;
+    background:#f0eaff;
+    color:var(--purple);
+    font-size:70px;
+}
+.detail-stock{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin:28px 0 20px;
+}
+.detail-stock div{
+    background:#faf9fe;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+}
+.detail-stock span{
+    display:block;
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:5px;
+}
+.detail-stock strong{
+    font:800 28px "Plus Jakarta Sans";
+    color:var(--purple);
+}
+.compact-equipment-card .equipment-image{height:150px}
+@media(max-width:620px){
+    .equipment-list-main{align-items:flex-start}
+    .equipment-list-side{align-items:flex-start}
+    .detail-stock{grid-template-columns:1fr}
+}
+
+
+.unit-ids {
+    margin: 8px 0 0;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    opacity: 0.78;
+    word-break: break-word;
+}
+
+
+/* Physical unit selection */
+.unit-select-wrap{
+    margin-top:18px;
+}
+.unit-select-wrap > label,
+.unit-select-form label{
+    display:block;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+.unit-select-form{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+.unit-select-form select{
+    flex:1;
+    min-width:0;
+    border:1px solid #dcd8e7;
+    background:#fff;
+    border-radius:12px;
+    padding:12px 14px;
+    font:inherit;
+    color:var(--ink);
+    outline:none;
+}
+.unit-select-form select:focus{
+    border-color:var(--purple);
+    box-shadow:0 0 0 3px #eee8ff;
+}
+.detail-unit-form{
+    display:grid;
+    gap:8px;
+    width:100%;
+}
+.detail-unit-form select{
+    width:100%;
+}
+.detail-unit-form .primary-btn{
+    width:100%;
+}
+.selected-unit{
+    color:var(--purple-dark)!important;
+    margin-top:8px;
+}
+@media(max-width:620px){
+    .unit-select-form{
+        flex-direction:column;
+        align-items:stretch;
+    }
+}

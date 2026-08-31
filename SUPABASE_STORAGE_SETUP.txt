@@ -1,0 +1,19 @@
+E-PINJAM - Supabase Storage image setup
+
+Add these Environment Variables in Render:
+
+SUPABASE_URL=<your Supabase project URL>
+SUPABASE_SERVICE_ROLE_KEY=<your Supabase service-role key>
+SUPABASE_STORAGE_BUCKET=equipment-images
+
+The application will create the equipment-images bucket if it does not exist.
+The bucket must be PUBLIC so browser image URLs can be displayed.
+
+Existing local images under static/uploads/equipment/ are migrated to the bucket
+automatically at application startup when the three variables are configured.
+
+New equipment images are uploaded directly to Supabase Storage.
+They no longer need git add / commit / push.
+
+IMPORTANT:
+Never put SUPABASE_SERVICE_ROLE_KEY in GitHub or source code.

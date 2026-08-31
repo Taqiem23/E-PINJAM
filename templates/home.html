@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Home · E-PINJAM{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-content">
+    <p class="eyebrow">EQUIPMENT BORROWING SYSTEM</p>
+    <h1>Borrow equipment <span>more easily.</span></h1>
+    <p class="lead">Select the equipment you need, submit one borrowing transaction, and return it when you are finished.</p>
+    {% if current_user %}
+      <a class="primary-btn" href="{{ url_for('equipment') }}">View Equipment</a>
+    {% else %}
+      <a class="primary-btn" href="{{ url_for('login') }}">Get Started</a>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <p class="eyebrow">EQUIPMENT</p>
+  <h2>Available Equipment</h2>
+  <div class="grid-3">
+    {% for item in equipment %}
+    <article class="card equipment-card compact-equipment-card">
+      {% if item.image_filename %}
+      <img
+        class="equipment-image"
+        src="{{ equipment_image_url(item) }}"
+        alt="{{ item.name }}"
+      >
+      {% else %}
+      <div class="equipment-image equipment-image-placeholder">▣</div>
+      {% endif %}
+
+      <p class="code">{{ item.code }}</p>
+      <h3>{{ item.name }}</h3>
+      <p>{{ item.description or 'No description available.' }}</p>
+
+      <div class="stock-info">
+        <span>Available stock</span>
+        <strong>{{ item.available_quantity }} / {{ item.quantity }}</strong>
+      </div>
+      <p class="unit-ids"><strong>Unit IDs:</strong> {{ item.unit_codes.replace(',', ', ') }}</p>
+
+      <span class="status {{ item.status|lower }}">{{ item.status }}</span>
+    </article>
+    {% else %}
+    <div class="empty"><p>No equipment is available at the moment.</p></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

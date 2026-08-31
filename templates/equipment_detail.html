@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}{{ item.name }} · E-PINJAM{% endblock %}
+
+{% block content %}
+<div class="detail-card">
+    {% if item.image_filename %}
+    <img
+        class="detail-image"
+        src="{{ equipment_image_url(item) }}"
+        alt="{{ item.name }}"
+    >
+    {% else %}
+    <div class="detail-image detail-image-placeholder">▣</div>
+    {% endif %}
+
+    <p class="eyebrow">{{ item.code }}</p>
+    <h1>{{ item.name }}</h1>
+    <p class="lead">{{ item.description or 'No description available.' }}</p>
+
+    <p class="unit-ids"><strong>Unit IDs:</strong> {{ item.unit_codes.replace(',', ', ') }}</p>
+
+    <div class="detail-stock">
+        <div>
+            <span>Total quantity</span>
+            <strong>{{ item.quantity }}</strong>
+        </div>
+        <div>
+            <span>Available now</span>
+            <strong>{{ item.available_quantity }}</strong>
+        </div>
+    </div>
+
+    <span class="status {{ item.status|lower }}">{{ item.status }}</span>
+
+    <div class="detail-actions">
+        {% if available_units %}
+        <form method="post" action="{{ url_for('add_to_borrow_list',equipment_id=item.id) }}" class="unit-select-form detail-unit-form">
+            <label for="detail-unit">Select available unit</label>
+            <select id="detail-unit" name="unit_code" required>
+                <option value="" selected disabled>Select a unit</option>
+                {% for unit in available_units %}
+                <option value="{{ unit }}">{{ unit }}</option>
+                {% endfor %}
+            </select>
+            <button class="primary-btn" type="submit">+ Add to Borrowing List</button>
+        </form>
+        {% else %}
+        <button class="disabled-btn" disabled>All Units Borrowed</button>
+        {% endif %}
+
+        <a class="outline-btn" href="{{ url_for('equipment') }}">Back to Equipment</a>
+    </div>
+</div>
+{% endblock %}

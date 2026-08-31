@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% block title %}Manage Equipment · E-PINJAM{% endblock %}
+
+{% block content %}
+<section class="section">
+    <p class="eyebrow">ADMIN</p>
+
+    <div class="section-head">
+        <div>
+            <h1>Manage Equipment</h1>
+            <p class="lead">
+                Add equipment, upload a picture and set the total stock quantity.
+            </p>
+        </div>
+    </div>
+
+    <div class="admin-grid">
+
+        <!-- =========================
+             ADD EQUIPMENT FORM
+             ========================= -->
+        <div class="form-panel">
+            <h2>Add Equipment</h2>
+
+            <form
+                method="post"
+                enctype="multipart/form-data"
+                class="form"
+            >
+
+                <label>
+                    Equipment code
+                    <input
+                        name="code"
+                        placeholder="EQ006"
+                        required
+                    >
+                </label>
+
+                <label>
+                    Equipment name
+                    <input
+                        name="name"
+                        placeholder="Equipment name"
+                        required
+                    >
+                </label>
+
+                <label>
+                    Quantity
+                    <input
+                        name="quantity"
+                        type="number"
+                        min="1"
+                        value="1"
+                        required
+                    >
+
+                    <small>
+                        Number of physical units available in the store.
+                    </small>
+                </label>
+
+                <label>
+                    Equipment image
+
+                    <input
+                        name="image"
+                        type="file"
+                        accept=".png,.jpg,.jpeg,.gif,.webp,image/*"
+                    >
+
+                    <small>
+                        Optional. PNG, JPG, JPEG, GIF or WEBP.
+                        Maximum 5 MB.
+                    </small>
+                </label>
+
+                <label>
+                    Description
+
+                    <textarea
+                        name="description"
+                        rows="4"
+                        placeholder="Short description"
+                    ></textarea>
+                </label>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Add Equipment
+                </button>
+
+            </form>
+        </div>
+
+
+        <!-- =========================
+             CURRENT EQUIPMENT
+             ========================= -->
+        <div class="list-card">
+
+            <h2>Current Equipment</h2>
+
+            {% for item in equipment %}
+
+            <div class="list-row equipment-list-row">
+
+                <!-- =========================
+                     EQUIPMENT INFORMATION
+                     ========================= -->
+                <div class="equipment-list-main">
+
+                    <!-- Equipment Image -->
+                    {% if item.image_filename %}
+
+                    <img
+                        class="equipment-thumb"
+                        src="{{ equipment_image_url(item) }}"
+                        alt="{{ item.name }}"
+                    >
+
+                    {% else %}
+
+                    <div class="equipment-thumb placeholder-thumb">
+                        ▣
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- Equipment Details -->
+                    <div>
+
+                        <p class="code">
+                            {{ item.code }}
+                        </p>
+
+                        <h3>
+                            {{ item.name }}
+                        </h3>
+
+                        <p>
+                            {{ item.description or 'No description.' }}
+                        </p>
+
+
+                        <!-- Stock Information -->
+                        <div class="stock-line">
+
+                            <strong>
+                                {{ item.available_quantity }}
+                            </strong>
+
+                            available
+
+                            <span>
+                                of {{ item.quantity }} units
+                            </span>
+
+                        </div>
+
+
+                        <!-- Unit IDs -->
+                        <p class="unit-ids">
+                            <strong>
+                                Unit IDs:
+                            </strong>
+
+                            {{ item.unit_codes.replace(',', ', ') }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     STATUS + DELETE BUTTON
+                     ========================= -->
+                <div class="equipment-list-side">
+
+                    <span class="status {{ item.status|lower }}">
+                        {{ item.status }}
+                    </span>
+
+
+                    <!-- Delete button appears when Available -->
+                    {% if item.status == 'Available' %}
+
+                    <form
+                        method="post"
+                        action="{{ url_for('delete_equipment', equipment_id=item.id) }}"
+                        class="inline-form"
+                    >
+
+                        <button
+                            type="submit"
+                            class="danger-btn"
+                        >
+                            Delete
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            {% else %}
+
+            <p>
+                No equipment.
+            </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+{% endblock %}

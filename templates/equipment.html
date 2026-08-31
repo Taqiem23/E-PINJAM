@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Equipment · E-PINJAM{% endblock %}
+
+{% block content %}
+<section class="section top-section">
+    <p class="eyebrow">STUDENT</p>
+
+    <div class="section-head">
+        <div>
+            <h1>Select Equipment</h1>
+        </div>
+
+        <a class="primary-btn" href="{{ url_for('borrow_list') }}">
+            Borrowing List ({{ session.get('borrow_list',[])|length }})
+        </a>
+    </div>
+
+    <div class="grid-3">
+        {% for item in equipment %}
+        <article class="card equipment-card">
+            {% if item.image_filename %}
+            <img
+                class="equipment-image"
+                src="{{ equipment_image_url(item) }}"
+                alt="{{ item.name }}"
+            >
+            {% else %}
+            <div class="equipment-image equipment-image-placeholder">▣</div>
+            {% endif %}
+
+            <p class="code">{{ item.code }}</p>
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description or 'No description available.' }}</p>
+
+            <div class="stock-info">
+                <span>Available stock</span>
+                <strong>{{ item.available_quantity }} / {{ item.quantity }}</strong>
+            </div>
+            <p class="unit-ids"><strong>Unit IDs:</strong> {{ item.unit_codes.replace(',', ', ') }}</p>
+
+            <div class="divider"></div>
+
+            <span class="status {{ item.status|lower }}">
+                {{ item.status }}
+            </span>
+
+            <div class="unit-select-wrap">
+                <label for="unit-{{ item.id }}">Select unit</label>
+                {% if available_units[item.id] %}
+                <form method="post" action="{{ url_for('add_to_borrow_list',equipment_id=item.id) }}" class="unit-select-form">
+                    <select id="unit-{{ item.id }}" name="unit_code" required>
+                        <option value="" selected disabled>Select an available unit</option>
+                        {% for unit in available_units[item.id] %}
+                        <option value="{{ unit }}">{{ unit }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="primary-btn" type="submit">+ Add</button>
+                </form>
+                {% else %}
+                <button class="disabled-btn" disabled>All Units Borrowed</button>
+                {% endif %}
+            </div>
+
+            <div class="card-actions">
+                <a
+                    class="outline-btn"
+                    href="{{ url_for('equipment_detail',equipment_id=item.id) }}"
+                >
+                    View
+                </a>
+            </div>
+        </article>
+        {% else %}
+        <div class="empty">
+            <h3>No equipment available</h3>
+            <p>Please check again later.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard · E-PINJAM{% endblock %}
+
+{% block content %}
+<section class="section">
+    <p class="eyebrow">LECTURER / ADMIN</p>
+    <h1>Dashboard</h1>
+    <p class="lead">Overview of equipment inventory and borrowing activity.</p>
+
+    <div class="stats">
+        <div class="stat-card">
+            <span>Equipment Types</span>
+            <strong>{{ total }}</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Available Types</span>
+            <strong>{{ available }}</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Borrowed Types</span>
+            <strong>{{ borrowed }}</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Total Units</span>
+            <strong>{{ total_units }}</strong>
+        </div>
+    </div>
+
+    <div class="section-head">
+        <div>
+            <h2>Equipment Inventory</h2>
+            <p class="lead">Image and stock quantity for each equipment item.</p>
+        </div>
+    </div>
+
+    <div class="grid-3 dashboard-equipment-grid">
+        {% for item in equipment %}
+        <article class="card equipment-card compact-equipment-card">
+            {% if item.image_filename %}
+            <img
+                class="equipment-image"
+                src="{{ equipment_image_url(item) }}"
+                alt="{{ item.name }}"
+            >
+            {% else %}
+            <div class="equipment-image equipment-image-placeholder">▣</div>
+            {% endif %}
+
+            <p class="code">{{ item.code }}</p>
+            <h3>{{ item.name }}</h3>
+
+            <div class="stock-info">
+                <span>Available</span>
+                <strong>{{ item.available_quantity }} / {{ item.quantity }}</strong>
+            </div>
+            <p class="unit-ids"><strong>Unit IDs:</strong> {{ item.unit_codes.replace(',', ', ') }}</p>
+
+            <span class="status {{ item.status|lower }}">{{ item.status }}</span>
+        </article>
+        {% else %}
+        <div class="empty">
+            <p>No equipment.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="section-head">
+        <div>
+            <h2>Recent Borrowing Records</h2>
+        </div>
+        <a class="outline-btn" href="{{ url_for('records') }}">View All Records</a>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Equipment</th>
+                    <th>Borrowed</th>
+                    <th>Returned</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for loan in loans[:8] %}
+                <tr>
+                    <td>{{ loan.student.name }}</td>
+                    <td>
+                        {% for line in loan.items %}
+                            {{ line.equipment.name }} ({{ line.quantity }}){% if line.unit_code %} — {{ line.unit_code }}{% endif %}
+                            {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ loan.borrowed_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+                    <td>
+                        {% if loan.returned_at %}
+                            {{ loan.returned_at.strftime('%d %b %Y, %I:%M %p') }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="status {{ loan.status|lower }}">{{ loan.status }}</span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="center">No borrowing records yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
