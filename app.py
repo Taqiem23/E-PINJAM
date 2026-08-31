@@ -31,6 +31,8 @@ app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB per upload
 # Storage instead of Render/local disk.
 SUPABASE_URL = os.getenv('SUPABASE_URL', '').strip().rstrip('/')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY', '').strip()
+SUPABASE_SERVICE_ROLE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY', '').strip()
+
 SUPABASE_STORAGE_BUCKET = os.getenv(
     'SUPABASE_STORAGE_BUCKET',
     'equipment-images'
