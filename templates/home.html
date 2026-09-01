@@ -1,50 +1,632 @@
 {% extends 'base.html' %}
-{% block title %}Home · E-PINJAM{% endblock %}
+
+{% block title %}
+E-PINJAM · Equipment Borrowing System
+{% endblock %}
+
+
 {% block content %}
-<section class="hero">
-  <div class="hero-content">
-    <p class="eyebrow">EQUIPMENT BORROWING SYSTEM</p>
-    <h1>Borrow equipment <span>more easily.</span></h1>
-    <p class="lead">Select the equipment you need, submit one borrowing transaction, and return it when you are finished.</p>
-    {% if current_user %}
-      <a class="primary-btn" href="{{ url_for('equipment') }}">View Equipment</a>
-    {% else %}
-      <a class="primary-btn" href="{{ url_for('login') }}">Get Started</a>
-    {% endif %}
-  </div>
+
+<!-- =========================
+     HERO
+     ========================= -->
+<section class="hero-section">
+
+    <div class="hero-container">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Smart Equipment Borrowing
+            </div>
+
+
+            <h1>
+                Borrow what you need.
+                <span>When you need it.</span>
+            </h1>
+
+
+            <p class="hero-description">
+                E-PINJAM makes equipment borrowing easier,
+                faster and more organised. Find available
+                equipment and manage your borrowing in one place.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                {% if current_user %}
+
+                    <a
+                        href="{{ url_for('equipment') }}"
+                        class="primary-btn hero-btn"
+                    >
+                        Browse Equipment
+                        <span>→</span>
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{{ url_for('register') }}"
+                        class="primary-btn hero-btn"
+                    >
+                        Get Started
+                        <span>→</span>
+                    </a>
+
+                    <a
+                        href="{{ url_for('login') }}"
+                        class="secondary-btn hero-btn"
+                    >
+                        Sign In
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="hero-trust">
+
+                <div class="trust-avatars">
+
+                    <span>A</span>
+                    <span>E</span>
+                    <span>P</span>
+                    <span>+</span>
+
+                </div>
+
+                <div>
+                    <strong>Simple & organised</strong>
+                    <small>Manage equipment with ease</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             HERO VISUAL
+             ========================= -->
+        <div class="hero-visual">
+
+            <div class="hero-orb orb-one"></div>
+            <div class="hero-orb orb-two"></div>
+
+
+            <div class="floating-card floating-card-top">
+
+                <div class="floating-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>Available</strong>
+                    <small>Ready to borrow</small>
+                </div>
+
+            </div>
+
+
+            <div class="hero-device">
+
+                <div class="device-header">
+
+                    <div class="device-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <span>E-PINJAM</span>
+
+                </div>
+
+
+                <div class="device-content">
+
+                    <div class="device-mini-title">
+                        Available Equipment
+                    </div>
+
+
+                    <div class="mini-equipment">
+
+                        {% for item in equipment[:3] %}
+
+                        <div class="mini-equipment-card">
+
+                            {% if item.image_filename %}
+
+                                <img
+                                    src="{{ url_for('static', filename=item.image_filename) }}"
+                                    alt="{{ item.name }}"
+                                >
+
+                            {% else %}
+
+                                <div class="mini-placeholder">
+                                    <span>▣</span>
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="mini-equipment-info">
+
+                                <strong>
+                                    {{ item.name }}
+                                </strong>
+
+                                <small>
+                                    {{ item.available_quantity }}
+                                    available
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="mini-empty">
+                            No equipment available yet.
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div class="device-progress">
+
+                        <div>
+                            <span></span>
+                            Equipment availability
+                        </div>
+
+                        <div class="progress-bar">
+                            <span></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="floating-card floating-card-bottom">
+
+                <div class="floating-number">
+                    {{ equipment|length }}
+                </div>
+
+                <div>
+                    <strong>Equipment</strong>
+                    <small>In the system</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
-<section class="section">
-  <p class="eyebrow">EQUIPMENT</p>
-  <h2>Available Equipment</h2>
-  <div class="grid-3">
-    {% for item in equipment %}
-    <article class="card equipment-card compact-equipment-card">
-      {% if item.image_filename %}
-      <img
-        class="equipment-image"
-        src="{{ equipment_image_url(item) }}"
-        alt="{{ item.name }}"
-      >
-      {% else %}
-      <div class="equipment-image equipment-image-placeholder">▣</div>
-      {% endif %}
 
-      <p class="code">{{ item.code }}</p>
-      <h3>{{ item.name }}</h3>
-      <p>{{ item.description or 'No description available.' }}</p>
+<!-- =========================
+     STATS
+     ========================= -->
+<section class="stats-section">
 
-      <div class="stock-info">
-        <span>Available stock</span>
-        <strong>{{ item.available_quantity }} / {{ item.quantity }}</strong>
-      </div>
-      <p class="unit-ids"><strong>Unit IDs:</strong> {{ item.unit_codes.replace(',', ', ') }}</p>
+    <div class="stats-container">
 
-      <span class="status {{ item.status|lower }}">{{ item.status }}</span>
-    </article>
-    {% else %}
-    <div class="empty"><p>No equipment is available at the moment.</p></div>
-    {% endfor %}
-  </div>
+        <div class="stat-item">
+
+            <div class="stat-icon">
+                ◇
+            </div>
+
+            <div>
+                <strong>{{ equipment|length }}</strong>
+                <span>Equipment</span>
+            </div>
+
+        </div>
+
+
+        <div class="stat-item">
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+            <div>
+                <strong>Easy</strong>
+                <span>Borrowing Process</span>
+            </div>
+
+        </div>
+
+
+        <div class="stat-item">
+
+            <div class="stat-icon">
+                ◎
+            </div>
+
+            <div>
+                <strong>Secure</strong>
+                <span>Account System</span>
+            </div>
+
+        </div>
+
+
+        <div class="stat-item">
+
+            <div class="stat-icon">
+                ↗
+            </div>
+
+            <div>
+                <strong>Simple</strong>
+                <span>Management</span>
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
+
+
+<!-- =========================
+     EQUIPMENT SECTION
+     ========================= -->
+<section class="equipment-section">
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <div class="section-label">
+                    OUR EQUIPMENT
+                </div>
+
+                <h2>
+                    Everything you need,
+                    <span>in one place.</span>
+                </h2>
+
+                <p>
+                    Browse the equipment currently available
+                    through the E-PINJAM system.
+                </p>
+
+            </div>
+
+
+            {% if current_user %}
+
+            <a
+                href="{{ url_for('equipment') }}"
+                class="outline-btn"
+            >
+                View All Equipment
+                <span>→</span>
+            </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="equipment-grid">
+
+            {% for item in equipment[:6] %}
+
+            <article class="equipment-card">
+
+                <div class="equipment-image-wrap">
+
+                    {% if item.image_filename %}
+
+                    <img
+                        src="{{ url_for('static', filename=item.image_filename) }}"
+                        alt="{{ item.name }}"
+                        class="equipment-image"
+                    >
+
+                    {% else %}
+
+                    <div class="equipment-image-placeholder">
+                        <div>▣</div>
+                        <span>No image</span>
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="equipment-code">
+                        {{ item.code }}
+                    </div>
+
+
+                    {% if item.available_quantity > 0 %}
+
+                    <div class="equipment-status available">
+                        <span></span>
+                        Available
+                    </div>
+
+                    {% else %}
+
+                    <div class="equipment-status unavailable">
+                        <span></span>
+                        Unavailable
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="equipment-card-body">
+
+                    <div>
+
+                        <h3>
+                            {{ item.name }}
+                        </h3>
+
+                        <p>
+                            {{ item.description or
+                               'Equipment available for borrowing.' }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="equipment-card-footer">
+
+                        <div class="equipment-stock">
+
+                            <strong>
+                                {{ item.available_quantity }}
+                            </strong>
+
+                            <span>
+                                available
+                            </span>
+
+                        </div>
+
+
+                        {% if current_user %}
+
+                        <a
+                            href="{{ url_for(
+                                'equipment_detail',
+                                equipment_id=item.id
+                            ) }}"
+                            class="card-arrow"
+                        >
+                            →
+                        </a>
+
+                        {% else %}
+
+                        <a
+                            href="{{ url_for('login') }}"
+                            class="card-arrow"
+                        >
+                            →
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% else %}
+
+            <div class="empty-equipment">
+
+                <div class="empty-icon">
+                    ◇
+                </div>
+
+                <h3>
+                    No equipment yet
+                </h3>
+
+                <p>
+                    Equipment added by the administrator
+                    will appear here.
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     HOW IT WORKS
+     ========================= -->
+<section class="how-section">
+
+    <div class="section-container">
+
+        <div class="section-heading centered">
+
+            <div class="section-label">
+                HOW IT WORKS
+            </div>
+
+            <h2>
+                Borrowing made
+                <span>simple.</span>
+            </h2>
+
+            <p>
+                Three simple steps to get the equipment you need.
+            </p>
+
+        </div>
+
+
+        <div class="steps-grid">
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <div class="step-icon">
+                    ◇
+                </div>
+
+                <h3>
+                    Find Equipment
+                </h3>
+
+                <p>
+                    Browse the available equipment
+                    and choose what you need.
+                </p>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <div class="step-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Submit Request
+                </h3>
+
+                <p>
+                    Select the equipment unit and
+                    submit your borrowing request.
+                </p>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <div class="step-icon">
+                    ↗
+                </div>
+
+                <h3>
+                    Borrow & Return
+                </h3>
+
+                <p>
+                    Collect your equipment and
+                    return it according to the system.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CTA
+     ========================= -->
+<section class="cta-section">
+
+    <div class="cta-container">
+
+        <div class="cta-decoration decoration-one"></div>
+        <div class="cta-decoration decoration-two"></div>
+
+        <div class="cta-content">
+
+            <div class="section-label light">
+                E-PINJAM
+            </div>
+
+            <h2>
+                Ready to borrow
+                <span>equipment?</span>
+            </h2>
+
+            <p>
+                Start browsing available equipment
+                and make your borrowing process easier.
+            </p>
+
+
+            {% if current_user %}
+
+            <a
+                href="{{ url_for('equipment') }}"
+                class="cta-btn"
+            >
+                Browse Equipment
+                <span>→</span>
+            </a>
+
+            {% else %}
+
+            <a
+                href="{{ url_for('register') }}"
+                class="cta-btn"
+            >
+                Create Account
+                <span>→</span>
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
 {% endblock %}

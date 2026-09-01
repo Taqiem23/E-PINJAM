@@ -1,1 +1,1613 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{% block title %}E-PINJAM{% endblock %}</title><link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"></head><body><header class="navbar"><div class="nav-inner"><a class="brand" href="{{ url_for('home') }}">E-PINJAM</a><nav><a href="{{ url_for('home') }}">Home</a>{% if current_user %}{% if current_user.role=='student' %}<a href="{{ url_for('equipment') }}">Equipment</a><a href="{{ url_for('borrow_list') }}">Borrowing List <span class="count">{{ session.get('borrow_list',[])|length }}</span></a><a href="{{ url_for('my_loans') }}">My Loans</a>{% else %}<a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('records') }}">Borrowing Records</a>{% if current_user.role=='admin' %}<a href="{{ url_for('admin_equipment') }}">Equipment</a><a href="{{ url_for('admin_lecturers') }}">Lecturers</a>{% endif %}{% endif %}<span class="user-pill">{{ current_user.name }}</span><a class="outline-btn small" href="{{ url_for('logout') }}">Logout</a>{% else %}<a href="{{ url_for('login') }}">Login</a><a class="primary-btn small" href="{{ url_for('register') }}">Register</a>{% endif %}</nav></div></header><main class="page">{% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}{% block content %}{% endblock %}</main><footer class="footer">E-PINJAM · Equipment Borrowing System</footer></body></html>
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}E-PINJAM{% endblock %}
+    </title>
+
+    <meta
+        name="description"
+        content="E-PINJAM Equipment Borrowing Management System"
+    >
+
+    <meta
+        name="theme-color"
+        content="#6d45e5"
+    >
+
+
+    <!-- =========================
+         PREMIUM FONTS
+         ========================= -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================
+         MAIN CSS
+         ========================= -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    {% block head %}{% endblock %}
+
+</head>
+
+
+<body>
+
+
+<div class="site-shell">
+
+
+    <!-- =====================================================
+         PREMIUM NAVBAR
+         ===================================================== -->
+
+    <header class="navbar premium-navbar">
+
+        <div class="nav-container">
+
+
+            <!-- =========================
+                 BRAND
+                 ========================= -->
+
+            <a
+                href="{{ url_for('home') }}"
+                class="brand premium-brand"
+            >
+
+                <span class="brand-mark">
+
+                    <span>E</span>
+
+                </span>
+
+
+                <span class="brand-text">
+
+                    <strong>
+                        E-PINJAM
+                    </strong>
+
+                    <small>
+                        Equipment Borrowing System
+                    </small>
+
+                </span>
+
+            </a>
+
+
+            <!-- =========================
+                 MOBILE BUTTON
+                 ========================= -->
+
+            <button
+                class="mobile-menu-btn"
+                type="button"
+                onclick="toggleMobileMenu()"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                id="mobileMenuButton"
+            >
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+
+            <!-- =========================
+                 NAVIGATION
+                 ========================= -->
+
+            <nav
+                class="nav-links premium-nav-links"
+                id="mainNav"
+            >
+
+
+                <!-- HOME -->
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="{% if request.endpoint == 'home' %}active{% endif %}"
+                >
+
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    <span>
+                        Home
+                    </span>
+
+                </a>
+
+
+                {% if current_user %}
+
+
+                    <!-- EQUIPMENT -->
+
+                    <a
+                        href="{{ url_for('equipment') }}"
+                        class="{% if request.endpoint in ['equipment', 'equipment_detail'] %}active{% endif %}"
+                    >
+
+                        <span class="nav-icon">
+                            ▣
+                        </span>
+
+                        <span>
+                            Equipment
+                        </span>
+
+                    </a>
+
+
+                    {% if current_user.role in ['admin', 'lecturer'] %}
+
+
+                        <!-- DASHBOARD -->
+
+                        <a
+                            href="{{ url_for('dashboard') }}"
+                            class="{% if request.endpoint == 'dashboard' %}active{% endif %}"
+                        >
+
+                            <span class="nav-icon">
+                                ◫
+                            </span>
+
+                            <span>
+                                Dashboard
+                            </span>
+
+                        </a>
+
+
+                    {% else %}
+
+
+                        <!-- MY LOANS -->
+
+                        <a
+                            href="{{ url_for('my_loans') }}"
+                            class="{% if request.endpoint == 'my_loans' %}active{% endif %}"
+                        >
+
+                            <span class="nav-icon">
+                                ✓
+                            </span>
+
+                            <span>
+                                My Loans
+                            </span>
+
+                        </a>
+
+
+                    {% endif %}
+
+                {% endif %}
+
+
+                <!-- MOBILE ACCOUNT LINKS -->
+
+                <div class="mobile-nav-divider"></div>
+
+                <div class="mobile-nav-account">
+
+                    {% if current_user %}
+
+                        <div class="mobile-user-summary">
+
+                            <div class="user-avatar">
+                                {{ current_user.name[:1]|upper }}
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    {{ current_user.name }}
+                                </strong>
+
+                                <small>
+                                    {{ current_user.role|capitalize }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="{{ url_for('logout') }}"
+                            class="mobile-logout"
+                        >
+                            Logout
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{{ url_for('login') }}"
+                            class="mobile-login"
+                        >
+                            Login
+                        </a>
+
+                        <a
+                            href="{{ url_for('register') }}"
+                            class="mobile-register"
+                        >
+                            Get Started
+                            <span>→</span>
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </nav>
+
+
+            <!-- =========================
+                 DESKTOP ACCOUNT
+                 ========================= -->
+
+            <div class="nav-actions premium-nav-actions">
+
+                {% if current_user %}
+
+
+                    <div class="user-menu premium-user-menu">
+
+                        <div class="user-avatar">
+
+                            {{ current_user.name[:1]|upper }}
+
+                        </div>
+
+
+                        <div class="user-info">
+
+                            <strong>
+                                {{ current_user.name }}
+                            </strong>
+
+                            <small>
+                                {{ current_user.role|capitalize }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        href="{{ url_for('logout') }}"
+                        class="nav-login premium-logout"
+                    >
+
+                        <span>
+                            Logout
+                        </span>
+
+                        <span class="logout-icon">
+                            ↗
+                        </span>
+
+                    </a>
+
+
+                {% else %}
+
+
+                    <a
+                        href="{{ url_for('login') }}"
+                        class="nav-login"
+                    >
+                        Login
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('register') }}"
+                        class="nav-register"
+                    >
+
+                        Get Started
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         PAGE BACKGROUND DECORATION
+         ===================================================== -->
+
+    <div class="page-glow page-glow-one"></div>
+
+    <div class="page-glow page-glow-two"></div>
+
+
+    <!-- =====================================================
+         FLASH MESSAGES
+         ===================================================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            <div class="flash-container premium-flash-container">
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="flash-message premium-flash {{ category }}"
+                        role="alert"
+                    >
+
+                        <div class="flash-icon">
+
+                            {% if category == 'success' %}
+
+                                ✓
+
+                            {% elif category == 'error' %}
+
+                                !
+
+                            {% else %}
+
+                                i
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="flash-content">
+
+                            <span class="flash-label">
+
+                                {% if category == 'success' %}
+
+                                    Success
+
+                                {% elif category == 'error' %}
+
+                                    Attention
+
+                                {% else %}
+
+                                    Notice
+
+                                {% endif %}
+
+                            </span>
+
+
+                            <span class="flash-text">
+                                {{ message }}
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="flash-close"
+                            onclick="closeFlash(this)"
+                            aria-label="Close notification"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content">
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+
+    <!-- =====================================================
+         PREMIUM FOOTER
+         ===================================================== -->
+
+    <footer class="footer premium-footer">
+
+        <div class="footer-container">
+
+
+            <!-- =========================
+                 BRAND
+                 ========================= -->
+
+            <div class="footer-brand">
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="brand"
+                >
+
+                    <span class="brand-mark">
+
+                        <span>E</span>
+
+                    </span>
+
+
+                    <span class="brand-text">
+
+                        <strong>
+                            E-PINJAM
+                        </strong>
+
+                        <small>
+                            Equipment Borrowing System
+                        </small>
+
+                    </span>
+
+                </a>
+
+
+                <p>
+                    A simple and efficient equipment borrowing
+                    management system.
+                </p>
+
+
+                <div class="footer-status">
+
+                    <span class="footer-status-dot"></span>
+
+                    System operational
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 LINKS
+                 ========================= -->
+
+            <div class="footer-links">
+
+
+                <div>
+
+                    <h4>
+                        Platform
+                    </h4>
+
+
+                    <a href="{{ url_for('home') }}">
+                        Home
+                    </a>
+
+
+                    {% if current_user %}
+
+                    <a href="{{ url_for('equipment') }}">
+                        Equipment
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        Account
+                    </h4>
+
+
+                    {% if current_user %}
+
+
+                        <a href="{{ url_for('logout') }}">
+                            Logout
+                        </a>
+
+
+                    {% else %}
+
+
+                        <a href="{{ url_for('login') }}">
+                            Login
+                        </a>
+
+
+                        <a href="{{ url_for('register') }}">
+                            Register
+                        </a>
+
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             FOOTER BOTTOM
+             ========================= -->
+
+        <div class="footer-bottom">
+
+            <p>
+
+                ©
+                {{ now().year if now is defined else 2026 }}
+                E-PINJAM.
+                All rights reserved.
+
+            </p>
+
+
+            <span>
+                Equipment Borrowing Management System
+            </span>
+
+        </div>
+
+    </footer>
+
+</div>
+
+
+<!-- =====================================================
+     PREMIUM NAVIGATION SCRIPT
+     ===================================================== -->
+
+<script>
+
+function toggleMobileMenu() {
+
+    const nav =
+        document.getElementById("mainNav");
+
+    const button =
+        document.getElementById("mobileMenuButton");
+
+
+    if (!nav) {
+        return;
+    }
+
+
+    nav.classList.toggle("mobile-open");
+
+
+    if (button) {
+
+        const isOpen =
+            nav.classList.contains("mobile-open");
+
+        button.setAttribute(
+            "aria-expanded",
+            isOpen ? "true" : "false"
+        );
+
+        button.setAttribute(
+            "aria-label",
+            isOpen
+                ? "Close navigation menu"
+                : "Open navigation menu"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   CLOSE MOBILE MENU
+   ========================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const nav =
+            document.getElementById("mainNav");
+
+        const button =
+            document.getElementById("mobileMenuButton");
+
+
+        if (!nav || !button) {
+            return;
+        }
+
+
+        if (
+
+            nav.classList.contains("mobile-open") &&
+
+            !nav.contains(event.target) &&
+
+            !button.contains(event.target)
+
+        ) {
+
+            nav.classList.remove(
+                "mobile-open"
+            );
+
+            button.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            button.setAttribute(
+                "aria-label",
+                "Open navigation menu"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   CLOSE MENU AFTER NAVIGATION
+   ========================= */
+
+document.querySelectorAll(
+    "#mainNav a"
+).forEach(function(link) {
+
+    link.addEventListener(
+        "click",
+        function() {
+
+            const nav =
+                document.getElementById("mainNav");
+
+            const button =
+                document.getElementById("mobileMenuButton");
+
+
+            if (nav) {
+
+                nav.classList.remove(
+                    "mobile-open"
+                );
+
+            }
+
+
+            if (button) {
+
+                button.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================
+   FLASH CLOSE
+   ========================= */
+
+function closeFlash(button) {
+
+    const message =
+        button.closest(".flash-message");
+
+
+    if (!message) {
+        return;
+    }
+
+
+    message.style.opacity = "0";
+
+    message.style.transform =
+        "translateY(-10px) scale(.98)";
+
+
+    setTimeout(function() {
+
+        message.remove();
+
+    }, 250);
+
+}
+
+
+/* =========================
+   AUTO DISMISS FLASH
+   ========================= */
+
+setTimeout(function() {
+
+    document
+        .querySelectorAll(".flash-message")
+        .forEach(function(message) {
+
+            message.style.opacity = "0";
+
+            message.style.transform =
+                "translateY(-8px)";
+
+            setTimeout(function() {
+
+                if (message.parentNode) {
+
+                    message.remove();
+
+                }
+
+            }, 300);
+
+        });
+
+}, 4500);
+
+</script>
+
+
+<!-- =====================================================
+     PREMIUM BASE STYLES
+     ===================================================== -->
+
+<style>
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+body {
+    overflow-x: hidden;
+}
+
+.site-shell {
+    position: relative;
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.premium-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background:
+        rgba(255,255,255,.78);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+    box-shadow:
+        0 8px 35px rgba(38,25,75,.045);
+}
+
+
+.premium-brand {
+    position: relative;
+}
+
+
+.premium-brand .brand-mark {
+    box-shadow:
+        0 12px 30px rgba(91,43,181,.25);
+}
+
+
+.premium-brand .brand-mark span {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   NAV LINKS
+   ========================================================= */
+
+.premium-nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+.nav-icon {
+    display: none;
+
+    font-size: 12px;
+
+    opacity: .75;
+}
+
+
+.premium-nav-links a.active {
+    color: #5b2bb5;
+}
+
+
+.premium-nav-links a.active::after {
+    width: 75%;
+}
+
+
+/* =========================================================
+   USER MENU
+   ========================================================= */
+
+.premium-user-menu {
+    padding: 6px 9px;
+
+    border: 1px solid rgba(227,224,235,.9);
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.68);
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.premium-user-menu:hover {
+
+    background:
+        rgba(255,255,255,.95);
+
+    box-shadow:
+        0 8px 24px rgba(39,25,74,.07);
+
+}
+
+
+.premium-user-menu .user-avatar {
+
+    box-shadow:
+        0 5px 15px rgba(91,43,181,.10);
+
+}
+
+
+.premium-logout {
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+}
+
+
+.logout-icon {
+
+    font-size: 11px;
+
+    opacity: .6;
+
+}
+
+
+/* =========================================================
+   PAGE GLOW
+   ========================================================= */
+
+.page-glow {
+
+    position: fixed;
+
+    z-index: -1;
+
+    width: 420px;
+    height: 420px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    filter: blur(5px);
+
+    opacity: .32;
+
+}
+
+
+.page-glow-one {
+
+    top: 90px;
+    left: -300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(129,91,229,.16),
+            transparent 70%
+        );
+
+}
+
+
+.page-glow-two {
+
+    top: 430px;
+    right: -300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(190,169,244,.15),
+            transparent 70%
+        );
+
+}
+
+
+/* =========================================================
+   FLASH
+   ========================================================= */
+
+.premium-flash-container {
+
+    position: fixed;
+
+    top: 90px;
+    right: 22px;
+
+    z-index: 2000;
+
+    width: min(
+        390px,
+        calc(100vw - 30px)
+    );
+
+}
+
+
+.premium-flash {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 11px;
+
+    padding: 13px 13px;
+
+    border:
+        1px solid rgba(224,221,235,.9);
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.93);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 20px 50px rgba(36,24,73,.14);
+
+    animation:
+        premiumFlashIn .35s ease both;
+
+}
+
+
+@keyframes premiumFlashIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(-12px)
+            scale(.97);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+.premium-flash .flash-icon {
+
+    width: 31px;
+    height: 31px;
+
+    display: grid;
+
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #f0ebff;
+
+    color: #6d45e5;
+
+    font-weight: 900;
+
+}
+
+
+.premium-flash.success .flash-icon {
+
+    color: #2eae72;
+
+    background: #eaf9f1;
+
+}
+
+
+.premium-flash.error .flash-icon {
+
+    color: #d65c69;
+
+    background: #fff0f2;
+
+}
+
+
+.flash-content {
+
+    min-width: 0;
+
+    padding-right: 20px;
+
+}
+
+
+.flash-label {
+
+    display: block;
+
+    color: #41374d;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+
+}
+
+
+.flash-text {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #85808e;
+
+    font-size: 10px;
+
+    line-height: 1.45;
+
+}
+
+
+.flash-close {
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    width: 24px;
+    height: 24px;
+
+    display: grid;
+
+    place-items: center;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    color: #9992a3;
+
+    background: transparent;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+}
+
+
+.flash-close:hover {
+
+    color: #5c5367;
+
+    background: #f4f2f7;
+
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.main-content {
+    position: relative;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.premium-footer {
+
+    position: relative;
+
+    margin-top: 50px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #211936,
+            #2f1b52
+        );
+
+    color: white;
+
+}
+
+
+.premium-footer::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    top: -360px;
+    right: -150px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 0 0 60px rgba(255,255,255,.025),
+        0 0 0 120px rgba(255,255,255,.015);
+
+}
+
+
+.premium-footer .brand-text strong {
+    color: white;
+}
+
+
+.premium-footer .brand-text small {
+    color: rgba(255,255,255,.48);
+}
+
+
+.premium-footer .brand-mark {
+
+    background:
+        linear-gradient(
+            135deg,
+            #9876f3,
+            #5b2bb5
+        );
+
+}
+
+
+.premium-footer .footer-brand > p {
+
+    color:
+        rgba(255,255,255,.52);
+
+}
+
+
+.premium-footer .footer-links h4 {
+
+    color:
+        rgba(255,255,255,.9);
+
+}
+
+
+.premium-footer .footer-links a {
+
+    color:
+        rgba(255,255,255,.48);
+
+}
+
+
+.premium-footer .footer-links a:hover {
+
+    color: white;
+
+}
+
+
+.footer-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 14px;
+
+    padding: 6px 9px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius: 999px;
+
+    color:
+        rgba(255,255,255,.5);
+
+    background:
+        rgba(255,255,255,.035);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+}
+
+
+.footer-status-dot {
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #57d69a;
+
+    box-shadow:
+        0 0 0 4px rgba(87,214,154,.09);
+
+}
+
+
+.premium-footer .footer-bottom {
+
+    border-top-color:
+        rgba(255,255,255,.08);
+
+}
+
+
+.premium-footer .footer-bottom p,
+.premium-footer .footer-bottom span {
+
+    color:
+        rgba(255,255,255,.38);
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+    .premium-navbar {
+
+        position: sticky;
+
+    }
+
+
+    .nav-icon {
+
+        display: inline-block;
+
+    }
+
+
+    .premium-nav-links {
+
+        box-shadow:
+            0 25px 60px rgba(32,20,68,.15);
+
+        border:
+            1px solid rgba(224,220,236,.9);
+
+        background:
+            rgba(255,255,255,.97);
+
+    }
+
+
+    .premium-nav-links a {
+
+        border-radius: 10px;
+
+    }
+
+
+    .premium-nav-links a.active {
+
+        background: #f4f0ff;
+
+    }
+
+
+    .mobile-nav-divider {
+
+        height: 1px;
+
+        margin: 7px 0;
+
+        background: #eeeaf3;
+
+    }
+
+
+    .mobile-nav-account {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 8px;
+
+    }
+
+
+    .mobile-user-summary {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        padding: 8px;
+
+        border-radius: 11px;
+
+        background: #faf9fd;
+
+    }
+
+
+    .mobile-user-summary strong,
+    .mobile-user-summary small {
+
+        display: block;
+
+    }
+
+
+    .mobile-user-summary strong {
+
+        color: #3a3144;
+
+        font-size: 10px;
+
+    }
+
+
+    .mobile-user-summary small {
+
+        margin-top: 2px;
+
+        color: #9991a4;
+
+        font-size: 8px;
+
+    }
+
+
+    .mobile-logout,
+    .mobile-login,
+    .mobile-register {
+
+        display: flex !important;
+
+        align-items: center;
+
+        justify-content: center;
+
+        width: 100%;
+
+    }
+
+
+    .mobile-logout {
+
+        color: #b0525e !important;
+
+        background: #fff4f5;
+
+    }
+
+
+    .mobile-register {
+
+        color: white !important;
+
+        background:
+            linear-gradient(
+                135deg,
+                #7951ea,
+                #4c25ae
+            ) !important;
+
+    }
+
+
+    .premium-nav-actions {
+
+        display: none;
+
+    }
+
+
+    .premium-flash-container {
+
+        top: 78px;
+
+        right: 15px;
+
+        left: 15px;
+
+        width: auto;
+
+    }
+
+
+    .premium-footer {
+
+        margin-top: 30px;
+
+    }
+
+}
+
+
+@media (min-width: 761px) {
+
+    .mobile-nav-divider,
+    .mobile-nav-account {
+
+        display: none;
+
+    }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .premium-flash {
+
+        animation: none;
+
+    }
+
+}
+
+</style>
+
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>
+```
